@@ -1,6 +1,7 @@
 export interface Message {
     message: string;
 }
-export interface MessageWithId extends Message {
+export interface MessageWithDateId extends Message {
     id: string;
+    date: string;
 }

@@ -1,19 +1,30 @@
 import express from 'express';
+import fileDb from '../fileDb';
+import { Message } from '../types';
 
 const messagesRouter = express.Router()
 
-messagesRouter.get('/', (req, res) => {
-    res.send('List of messages will be here');
+messagesRouter.get('/', async (req, res) => {
+    const messages = await fileDb.getMessages();
+    res.send(messages);
 });
 
 
-messagesRouter.get('/:id', (req, res) => {
-    res.send('A single message by id will be here');
+messagesRouter.get('/:id', async (req, res) => {
+    const messages = await fileDb.getMessages();
+    const message = messages.find(message => message.id === req.params.id);
+    res.send(message);
 });
 
-messagesRouter.post('/', (req, res) => {
-    console.log(req.body)
-   return res.send('Will create new');
+messagesRouter.post('/', async (req, res) => {
+    const message: Message = {
+        message: req.body.message,
+    };
+
+    const savedMessage = await fileDb.addMessage(message);
+    console.log(req.body);
+    return res.send(savedMessage);
+
 });
 
 export default messagesRouter;
